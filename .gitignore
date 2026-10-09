@@ -11,11 +11,13 @@ Debug/
 Release/
 Listings/
 Objects/
+*.dbgconf
 
 # STM32CubeMX
 *.ioc.bak
 Generated/
 Drivers/
+*.mxproject
 
 # Windows系统文件
 Thumbs.db
