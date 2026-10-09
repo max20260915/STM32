@@ -16,12 +16,21 @@ Objects/
 *.o
 *.d
 *.lst
+*.build_log.htm
+*.htm
+*.lnp
+*.dep
+*.base*
 
 # STM32CubeMX
 *.ioc.bak
 Generated/
 Drivers/
 *.mxproject
+
+# RTE
+RTE/
+*/RTE_Components.h
 
 # Windows系统文件
 Thumbs.db
