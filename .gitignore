@@ -1,0 +1,21 @@
+# Keil MDK 编译产物、临时文件
+*.uvgui*
+*.uvoptx
+*.uvprojx.bak
+*.map
+*.elf
+*.axf
+*.hex
+*.bin
+Debug/
+Release/
+Listings/
+Objects/
+
+# STM32CubeMX
+*.ioc.bak
+Generated/
+
+# Windows系统文件
+Thumbs.db
+.DS_Store
