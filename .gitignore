@@ -15,6 +15,7 @@ Objects/
 # STM32CubeMX
 *.ioc.bak
 Generated/
+Drivers/
 
 # Windows系统文件
 Thumbs.db
