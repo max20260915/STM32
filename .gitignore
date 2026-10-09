@@ -1,4 +1,4 @@
-# Keil MDK 编译产物、临时文件
+# Keil MDK
 *.uvgui*
 *.uvoptx
 *.uvprojx.bak
@@ -12,6 +12,10 @@ Release/
 Listings/
 Objects/
 *.dbgconf
+*.crf
+*.o
+*.d
+*.lst
 
 # STM32CubeMX
 *.ioc.bak
