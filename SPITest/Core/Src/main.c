@@ -51,12 +51,58 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_SPI1_Init(void);
 /* USER CODE BEGIN PFP */
-
+static void SaveLEDState(uint8_t ledState);
+static uint8_t LoadLEDState(void);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+static uint8_t LoadLEDState(void)
+{
+  uint8_t readDataCmd[] = {0x03, 0x00, 0x00, 0x00}; 
+  uint8_t ledState;
 
+  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, GPIO_PIN_RESET);  
+  HAL_SPI_Transmit(&hspi1, readDataCmd, 4, HAL_MAX_DELAY); 
+  HAL_SPI_Receive(&hspi1, &ledState, 1, HAL_MAX_DELAY);   
+  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, GPIO_PIN_SET);   
+  return ledState;
+}
+
+
+static void SaveLEDState(uint8_t ledState)
+{
+  
+  uint8_t writeEnableCmd[] = {0x06};
+  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, GPIO_PIN_RESET);
+  HAL_SPI_Transmit(&hspi1, writeEnableCmd, 1, HAL_MAX_DELAY);
+  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, GPIO_PIN_SET);
+
+  
+  uint8_t sectorErase[] = {0x20, 0x00, 0x00, 0x00}; 
+  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, GPIO_PIN_RESET);
+  HAL_SPI_Transmit(&hspi1, sectorErase, 4, HAL_MAX_DELAY);
+  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, GPIO_PIN_SET);
+  HAL_Delay(100);  
+
+ 
+  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, GPIO_PIN_RESET);
+  HAL_SPI_Transmit(&hspi1, writeEnableCmd, 1, HAL_MAX_DELAY);
+  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, GPIO_PIN_SET);
+
+  
+  uint8_t pageProgCmd[5];
+  pageProgCmd[0] = 0x02;  
+  pageProgCmd[1] = 0x00;   
+  pageProgCmd[2] = 0x00;  
+  pageProgCmd[3] = 0x00;   
+  pageProgCmd[4] = ledState;
+
+  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, GPIO_PIN_RESET);
+  HAL_SPI_Transmit(&hspi1, pageProgCmd, 5, HAL_MAX_DELAY);
+  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, GPIO_PIN_SET);
+  HAL_Delay(10);
+}
 /* USER CODE END 0 */
 
 /**
@@ -99,6 +145,18 @@ int main(void)
 	uint8_t pre = 1, cur =1 ;
 	uint8_t ledState = 0;
 	
+	ledState = LoadLEDState();
+
+if(ledState == 1)
+{
+  HAL_GPIO_WritePin(GPIOC,GPIO_PIN_13,GPIO_PIN_RESET);
+}
+else
+{
+  HAL_GPIO_WritePin(GPIOC,GPIO_PIN_13,GPIO_PIN_SET);
+}
+	
+	
   while (1)
   {
 		pre = cur;
@@ -126,6 +184,7 @@ int main(void)
 							ledState = 1;
 							
 						}
+						SaveLEDState(ledState);
 				}	
 			}
     /* USER CODE END WHILE */
