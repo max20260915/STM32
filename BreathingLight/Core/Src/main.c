@@ -83,27 +83,27 @@ int main(void)
   SystemClock_Config();
 
   /* USER CODE BEGIN SysInit */
-HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
-HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_1);
+
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_TIM1_Init();
   /* USER CODE BEGIN 2 */
-
+HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
+HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_1);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
-  {
-    /* USER CODE END WHILE */
-float t = HAL_GetTick() * 0.001;       
-    float duty = 0.5 * sin(2 * 3.14 * t) + 0.5; 
+  {float t = HAL_GetTick() * 0.001;       
+    float duty = 0.5 * sin(2 * 3.14 * t) + 0.5;  
     uint16_t arr = __HAL_TIM_GET_AUTORELOAD(&htim1); 
     uint16_t ccr = duty * (arr + 1);       
     __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, ccr);
+    /* USER CODE END WHILE */
+
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
