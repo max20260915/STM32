@@ -97,7 +97,25 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
 	
-		{  
+		{ HAL_ADC_Start(&hadc1);
+
+ 
+  HAL_ADC_PollForConversion(&hadc1, HAL_MAX_DELAY);
+
+ 
+  uint32_t dr = HAL_ADC_GetValue(&hadc1);
+
+  
+  float voltage = dr * (3.3f - 0.0f) / 4095.0f;
+
+  if(voltage > 1.5)
+  {
+      HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, GPIO_PIN_RESET);
+  }
+  else
+  {
+      HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, GPIO_PIN_SET);
+  } 
 			
 			
 
